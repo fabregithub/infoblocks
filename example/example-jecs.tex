@@ -1,0 +1,101 @@
+% Two Koriyama slides rebuilt in Beamer (example) with infoblocks.sty, to compare with
+% the Quarto deck (../quarto/, slides 6 and 8). Content as in the Quarto deck
+% (Kakushokai wording).
+\documentclass[aspectratio=169,10pt]{beamer}
+
+\usepackage{tabularray}
+\usepackage{fontspec}
+\usefonttheme{professionalfonts}
+\usepackage[math-style=TeX]{unicode-math}
+\setmainfont[Ligatures=TeX]{Noto Sans}
+\setmathfont[math-style=ISO,bold-style=ISO,vargreek-shape=TeX]{Lete Sans Math}
+\usepackage{zxjatype}
+\usepackage{xeCJK}
+\setCJKmainfont{Noto Sans CJK JP}
+\setCJKsansfont{Noto Sans CJK JP}
+
+\usetheme{JECS}
+\usepackage{infoblocks}
+
+\title{infoblocks demo}
+\date{2026年11月16日}
+
+\begin{document}
+
+% ==========================================================================
+\begin{frame}[t]{ロードマップ：調査の構成}
+	\begin{columns}[T,totalwidth=\textwidth]
+		\begin{column}{0.325\textwidth}
+			\begin{infocard}[navy][equal height group=kosei]{users}{全体調査}
+				\stat{約10万人}
+				\begin{itemize}
+					\item 質問票調査（保護者）：妊娠中〜小学生まで年2回、中学生以降はweb
+					\item 質問票調査（本人）：小学4年生〜6年生まで年1回、中学生以降はweb
+					\item 学童期検査（小2・小6）、乳歯調査（小4）
+					\item 青年期調査（高1）
+				\end{itemize}
+			\end{infocard}
+		\end{column}
+		\begin{column}{0.325\textwidth}
+			\begin{infocard}[teal][equal height group=kosei]{magnifying-glass}{詳細調査}
+				\stat[teal]{約5,000人}
+				{\tiny\color{black!55}2013--14年度生まれから抽出\par}
+				\begin{itemize}
+					\item 訪問調査（1.5歳・3歳）：ダニアレルゲン、VOCs、ハウスダストなど
+					\item 医学的検査・精神神経発達検査（2歳・4歳・6歳〈医学のみ〉・8歳・10歳・12歳）
+					\item 新版K式発達検査、CAT、10歳でWISC
+				\end{itemize}
+			\end{infocard}
+		\end{column}
+		\begin{column}{0.325\textwidth}
+			\begin{infocard}[red][equal height group=kosei]{vault}{生体試料の保管・分析}
+				\stat[red]{500万本超}
+				\begin{itemize}
+					\item 血液、臍帯血、母乳、尿、毛髪、乳歯を長期保管
+					\item 新たな測定法の確立後に、遡及的な測定が可能
+					\item 化学分析、遺伝子解析
+				\end{itemize}
+			\end{infocard}
+		\end{column}
+	\end{columns}
+
+	\vspace{4pt}
+	{\tiny\color{black!55}成人に達する年度以降も、データクリーニング、解析、論文化、発表（論文、学会）を継続する。}
+\end{frame}
+
+% ==========================================================================
+\begin{frame}[t]{13歳以降調査に関する継続の意思表示状況}
+	\begin{columns}[T,totalwidth=\textwidth]
+		\begin{column}{0.325\textwidth}
+			\stattile{users}{96.1\%}{親権者・継続者総数}
+		\end{column}
+		\begin{column}{0.325\textwidth}
+			\stattile[red]{thumbs-up}{51.2\%}{親権者・積極的意思表示}
+		\end{column}
+		\begin{column}{0.325\textwidth}
+			\stattile[teal]{laptop}{41.2\%}{本人（子ども）・ログイン数}
+		\end{column}
+	\end{columns}
+
+	\vspace{3pt}
+	{\tiny\color{black!55}合計（2011--13年度生まれ、75,420人）。2026年8月24日現在。}
+
+	\vspace{6pt}
+	\begin{tblr}{width=\textwidth, colspec={Q[l,m,wd=2.2cm] *{4}{X[l,m]}},
+		colsep=4pt, rowsep=3pt, cells={font=\scriptsize},
+		row{1}={font=\scriptsize\bfseries, fg=ibnavy},
+		cell{1}{5}={fg=ibred}, column{1}={font=\scriptsize\bfseries}}
+		& 2011年度生まれ\par{\tiny\mdseries\color{black!55}15,497人・小6は2023年度}
+		& 2012年度生まれ\par{\tiny\mdseries\color{black!55}29,098人・小6は2024年度}
+		& 2013年度生まれ\par{\tiny\mdseries\color{black!55}35,610人・小6は2025年度}
+		& 2014年度生まれ\par{\tiny\mdseries\color{black!55}18,097人・小6は2026年度} \\
+		{\color{ibnavy}継続者総数}
+		& \meter{86.0}[2.4cm] & \meter{98.7}[2.4cm] & \meter{98.5}[2.4cm] & \meter{99.4}[2.4cm] \\
+		{\color{ibred}積極的意思表示}
+		& \meter[red]{51.8}[2.4cm] & \meter[red]{50.4}[2.4cm] & \meter[red]{51.7}[2.4cm] & \meter[red]{38.6}[2.4cm] \\
+		{\color{ibtealink}本人ログイン}
+		& \meter[teal]{41.2}[2.4cm] & \meter[teal]{40.3}[2.4cm] & \meter[teal]{42.1}[2.4cm] & \meter[teal]{25.2}[2.4cm] \\
+	\end{tblr}
+\end{frame}
+
+\end{document}

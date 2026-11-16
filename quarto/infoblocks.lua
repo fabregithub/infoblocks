@@ -44,28 +44,95 @@ if not (quarto and quarto.doc.is_format("beamer")) then
 end
 
 -- Bootstrap Icons (Quarto decks) -> Font Awesome 7 Free (fontawesome7).
+-- Every pair was checked against Bootstrap Icons 1.13 and the fontawesome7
+-- mapping (Free icons only). The same groups appear on the icon pages of
+-- the cheatsheet (presentations repo, cheatsheet/). To add one: find the
+-- Bootstrap name at icons.getbootstrap.com and a Free match at
+-- fontawesome.com/icons, add a line, and render Beamer.
 local ICONS = {
-  ["activity"] = "wave-square", ["arrow-left-right"] = "arrows-left-right",
-  ["arrow-right"] = "arrow-right", ["backpack"] = "school",
-  ["balloon-heart"] = "baby", ["bank"] = "building-columns", ["book"] = "book",
-  ["buildings"] = "city", ["bullseye"] = "bullseye", ["calendar3"] = "calendar",
-  ["clipboard2-check"] = "clipboard-check", ["cup-hot"] = "mug-hot",
-  ["dash-circle"] = "circle-minus", ["diagram-3"] = "sitemap",
-  ["dice-5"] = "dice-five", ["droplet-fill"] = "droplet",
-  ["droplet-half"] = "droplet", ["egg-fried"] = "egg",
-  ["file-medical"] = "file-medical", ["fingerprint"] = "dna",
-  ["flag"] = "flag", ["geo-alt"] = "location-dot", ["globe2"] = "earth-asia",
-  ["hand-thumbs-up"] = "thumbs-up", ["heart-pulse"] = "heart-pulse",
-  ["hospital"] = "hospital", ["hospital-fill"] = "house-medical",
+  -- People, homes and places
+  ["people"] = "people-group", ["people-fill"] = "users",
+  ["person-fill"] = "user", ["person-standing"] = "person",
+  ["person-standing-dress"] = "person-dress",
+  ["person-hearts"] = "person-pregnant", ["person-check"] = "user-check",
+  ["person-wheelchair"] = "wheelchair", ["gender-female"] = "venus",
+  ["gender-male"] = "mars", ["balloon-heart"] = "baby",
+  ["emoji-smile"] = "face-smile", ["emoji-frown"] = "face-frown",
+  ["backpack"] = "school", ["mortarboard"] = "graduation-cap",
   ["house"] = "house", ["house-heart"] = "house-chimney",
-  ["journal-text"] = "file-lines", ["journals"] = "book", ["laptop"] = "laptop",
-  ["lightbulb"] = "brain", ["lungs"] = "lungs", ["megaphone"] = "bullhorn",
-  ["pencil-square"] = "pen-to-square", ["people"] = "people-group",
-  ["people-fill"] = "users", ["person-check"] = "user-check",
-  ["person-fill"] = "user", ["person-hearts"] = "person-pregnant",
-  ["plus-circle"] = "circle-plus", ["safe2"] = "vault",
-  ["search"] = "magnifying-glass", ["share"] = "share-nodes",
-  ["signpost-split"] = "signs-post", ["tree"] = "tree", ["wind"] = "wind",
+  ["house-door"] = "door-open", ["building"] = "building",
+  ["buildings"] = "city", ["bank"] = "building-columns", ["shop"] = "shop",
+  ["gender-ambiguous"] = "venus-mars",
+  -- Food and daily life
+  ["cup-hot"] = "mug-hot", ["cup-straw"] = "glass-water", ["egg"] = "egg",
+  ["egg-fried"] = "egg", ["apple"] = "apple-whole",
+  ["basket"] = "basket-shopping", ["cart"] = "cart-shopping",
+  ["cash-coin"] = "coins", ["piggy-bank"] = "piggy-bank",
+  -- Health and medicine
+  ["heart-pulse"] = "heart-pulse", ["heart"] = "heart",
+  ["heart-fill"] = "heart", ["lungs"] = "lungs", ["eye"] = "eye",
+  ["ear"] = "ear-listen", ["activity"] = "wave-square",
+  ["fingerprint"] = "dna", ["lightbulb"] = "brain", ["virus"] = "virus",
+  ["virus2"] = "viruses", ["capsule"] = "capsules",
+  ["capsule-pill"] = "pills", ["bandaid"] = "bandage",
+  ["prescription2"] = "prescription-bottle", ["eyedropper"] = "eye-dropper",
+  ["thermometer"] = "temperature-low", ["file-medical"] = "file-medical",
+  ["clipboard2-pulse"] = "notes-medical",
+  ["clipboard2-check"] = "clipboard-check", ["hospital"] = "hospital",
+  ["hospital-fill"] = "house-medical",
+  -- Environment and climate
+  ["tree"] = "tree", ["tree-fill"] = "tree", ["flower1"] = "seedling",
+  ["wind"] = "wind", ["sun"] = "sun", ["cloud"] = "cloud",
+  ["cloud-rain"] = "cloud-rain", ["cloud-haze"] = "smog",
+  ["thermometer-half"] = "temperature-half",
+  ["thermometer-sun"] = "temperature-high", ["water"] = "water",
+  ["droplet-fill"] = "droplet", ["droplet-half"] = "droplet",
+  ["fire"] = "fire", ["lightning"] = "bolt", ["recycle"] = "recycle",
+  ["trash"] = "trash", ["safe2"] = "vault", ["globe2"] = "earth-asia",
+  ["globe-asia-australia"] = "earth-asia", ["geo-alt"] = "location-dot",
+  ["map"] = "map", ["compass"] = "compass", ["droplet"] = "droplet",
+  ["cloud-haze2"] = "smog", ["geo-alt-fill"] = "location-dot",
+  -- Transport
+  ["truck"] = "truck", ["car-front"] = "car", ["bicycle"] = "bicycle",
+  ["airplane"] = "plane", ["train-front"] = "train",
+  -- Data and research
+  ["search"] = "magnifying-glass", ["zoom-in"] = "magnifying-glass-plus",
+  ["bar-chart"] = "chart-column", ["graph-up"] = "chart-line",
+  ["graph-up-arrow"] = "arrow-trend-up",
+  ["graph-down-arrow"] = "arrow-trend-down", ["pie-chart"] = "chart-pie",
+  ["table"] = "table", ["calculator"] = "calculator",
+  ["database"] = "database", ["percent"] = "percent", ["funnel"] = "filter",
+  ["clipboard-data"] = "clipboard-list", ["journals"] = "book",
+  ["journal-text"] = "file-lines", ["book"] = "book",
+  ["file-earmark-text"] = "file-lines", ["file-earmark-pdf"] = "file-pdf",
+  ["cpu"] = "microchip", ["gear"] = "gear", ["diagram-3"] = "sitemap",
+  ["bullseye"] = "bullseye", ["clipboard-check"] = "clipboard-check",
+  ["sliders"] = "sliders", ["speedometer2"] = "gauge-high",
+  ["hdd-network"] = "network-wired",
+  -- Communication and time
+  ["share"] = "share-nodes", ["megaphone"] = "bullhorn",
+  ["chat-dots"] = "comment-dots", ["envelope"] = "envelope",
+  ["telephone"] = "phone", ["camera"] = "camera", ["mic"] = "microphone",
+  ["easel"] = "chalkboard", ["person-video3"] = "chalkboard-user",
+  ["laptop"] = "laptop", ["link-45deg"] = "link", ["download"] = "download",
+  ["pencil-square"] = "pen-to-square", ["dice-5"] = "dice-five",
+  ["award"] = "award", ["trophy"] = "trophy", ["star"] = "star",
+  ["flag"] = "flag", ["calendar3"] = "calendar",
+  ["calendar-check"] = "calendar-check", ["clock"] = "clock",
+  ["hourglass-split"] = "hourglass-half",
+  ["calendar-heart"] = "calendar-day", ["calendar-plus"] = "calendar-plus",
+  ["stars"] = "wand-magic-sparkles",
+  -- Marks and arrows
+  ["arrow-right"] = "arrow-right",
+  ["arrow-left-right"] = "arrows-left-right", ["arrow-up"] = "arrow-up",
+  ["arrow-down"] = "arrow-down", ["arrow-repeat"] = "arrows-rotate",
+  ["plus-circle"] = "circle-plus", ["dash-circle"] = "circle-minus",
+  ["check-circle"] = "circle-check", ["x-circle"] = "circle-xmark",
+  ["exclamation-triangle"] = "triangle-exclamation",
+  ["question-circle"] = "circle-question", ["info-circle"] = "circle-info",
+  ["hand-thumbs-up"] = "thumbs-up", ["signpost-split"] = "signs-post",
+  ["shield-check"] = "shield-halved", ["lock"] = "lock", ["key"] = "key",
+  ["arrow-right-circle"] = "circle-arrow-right", ["lock-fill"] = "lock",
 }
 local FALLBACK_ICON = "circle"
 
@@ -313,16 +380,41 @@ local function Div(el)
   if has(el, "tile") then return stattile(el) end
 
   if has(el, "chain") then
-    local items, widths = {}, {}
-    for _, s in ipairs(spans(el, "ccard")) do
-      local acc = has(s, "now") and "navy" or "plain"
-      items[#items + 1] = pandoc.Blocks{ stattile(s, acc) }; widths[#widths + 1] = 0.28
-      items[#items + 1] = pandoc.Blocks{ RB("\\vspace{8pt}{\\color{ibtext}\\faIcon{arrow-right}}") }
-      widths[#widths + 1] = 0.04
+    -- Cards (.ccard) in order, with the deck's own operators (.op: ×, =, →)
+    -- between them; an arrow where the deck has none.
+    local seq = {}
+    el:walk{ Span = function(sp)
+      if has(sp, "ccard") or has(sp, "op") then seq[#seq + 1] = sp end
+    end }
+    local cards = 0
+    for _, sp in ipairs(seq) do if has(sp, "ccard") then cards = cards + 1 end end
+    local cw = math.min(0.28, (0.96 - 0.04 * (cards - 1)) / math.max(cards, 1))
+    local items, widths, last_was_card = {}, {}, false
+    local function op_block(txt)
+      return pandoc.Blocks{ RB("\\vspace{8pt}{\\Large\\color{ibtext}" .. txt .. "}") }
     end
-    items[#items] = nil; widths[#widths] = nil      -- no arrow after the last card
+    for _, sp in ipairs(seq) do
+      if has(sp, "ccard") then
+        if last_was_card then
+          items[#items + 1] = op_block("\\faIcon{arrow-right}"); widths[#widths + 1] = 0.04
+        end
+        -- as in jecs.scss: .result is the red total, .now the navy highlight
+        local acc = has(sp, "result") and "red" or has(sp, "now") and "navy" or "plain"
+        items[#items + 1] = pandoc.Blocks{ stattile(sp, acc) }; widths[#widths + 1] = cw
+        last_was_card = true
+      else
+        items[#items + 1] = op_block(lx(sp.content)); widths[#widths + 1] = 0.04
+        last_was_card = false
+      end
+    end
     return grid(items, widths)
   end
+
+  -- ::: stat / ::: stat-label blocks (the Div form of the big number)
+  if has(el, "stat") then
+    return RB("\\stat[" .. accent_of(el, "red") .. "]{" .. lx(pandoc.utils.blocks_to_inlines(el.content)) .. "}")
+  end
+  if has(el, "stat-label") then return wrapB(el.content, "{\\small", "\\par}") end
 
   if has(el, "takeaway") then return wrapB(el.content, "\\begin{takeaway}", "\\end{takeaway}") end
 

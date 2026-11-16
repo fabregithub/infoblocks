@@ -26,6 +26,11 @@ Mapping (Quarto markdown -> LaTeX)
   ::: org                        -> 3-column grid of cards and arrows
   ::: photos / booklet           -> images in a row / image beside text
   ::: legend                     -> dropped (it explains HTML-only colours)
+  ::: fine                       -> {\footnotesize ...} (small running text)
+  ::: closer                     -> closing paragraph at body size
+  ::: blist                      -> {\small ...} bullet list beside a figure
+  [..]{.leadin}                  -> red bold lead-in
+  ## Title {section="Name"}      -> \section{Name} before the frame (no divider)
   []{.ic .bi .bi-x}              -> \iconcircle / \softicon (Font Awesome name)
   []{.bi .bi-x}                  -> \faIcon
   [..]{.chip}                    -> \ibchip
@@ -218,6 +223,7 @@ function SpanF.Span(el)
     return wrap(el.content, "{\\bfseries ", "}")
   end
   if has(el, "lead") or has(el, "close-2") then return wrap(el.content, "{\\small ", "}") end
+  if has(el, "leadin") then return wrap(el.content, "{\\color{ibred}\\bfseries ", "}") end
   if has(el, "close-1") then return wrap(el.content, "{\\large\\color{ibnavy}", "}") end
   if has(el, "g") then return {} end
   return nil
@@ -323,8 +329,8 @@ local function iconbox(s, width, acc)
          .. "}\\par\\vspace{2pt}{\\tiny " .. lx(rest) .. "\\par}}"
 end
 
-local function tabular(spec, rows)
-  return RB("{\\tiny\\renewcommand{\\arraystretch}{1.15}\\begin{tabular}{" .. spec .. "}\n"
+local function tabular(spec, rows, size)
+  return RB("{\\" .. (size or "tiny") .. "\\renewcommand{\\arraystretch}{1.15}\\begin{tabular}{" .. spec .. "}\n"
             .. table.concat(rows, " \\\\\n") .. "\n\\end{tabular}\\par}")
 end
 
@@ -425,6 +431,9 @@ local function Div(el)
   if has(el, "center") then return wrapB(el.content, "\\begin{center}", "\\end{center}") end
   if has(el, "iline") then return wrapB(el.content, "{\\footnotesize", "\\par}\\vspace{2pt}") end
   if has(el, "legend") then return {} end
+  if has(el, "fine") then return wrapB(el.content, "{\\footnotesize", "\\par}") end
+  if has(el, "closer") then return wrapB(el.content, "\\vspace{0.3em}", "") end
+  if has(el, "blist") then return wrapB(el.content, "{\\small", "\\par}") end
 
   if has(el, "iconrow") or has(el, "timeline") then
     local cls = has(el, "iconrow") and "it" or "tp"
@@ -465,7 +474,9 @@ local function Div(el)
       end
     end }
     for i = 1, #cells, n do rows[#rows + 1] = table.concat({ table.unpack(cells, i, i + n - 1) }, " & ") end
-    return tabular("@{}l" .. string.rep("c", n - 1) .. "@{}", rows)
+    -- comparison grids carry sentences: wrap them in p-columns, at \footnotesize
+    local w = string.format("%.2f", 0.78 / (n - 1))
+    return tabular("@{}p{0.2\\linewidth}" .. string.rep("p{" .. w .. "\\linewidth}", n - 1) .. "@{}", rows, "footnotesize")
   end
 
   if has(el, "steps") then
@@ -516,6 +527,18 @@ local function Para(el)
   return nil
 end
 
+-- ## Title {section="Name"}: a section that starts at this slide, without a
+-- divider slide. For Beamer, an empty level-1 heading goes in front; with
+-- slide-level: 2 and section-titles: false Pandoc writes it as a bare
+-- \section{Name} (no frame), shown in the header by \showsectionname.
+-- (reveal.js reads the same attribute as data-section.)
+local function Header(el)
+  local name = el.level == 2 and el.attributes.section
+  if not name then return nil end
+  el.attributes.section = nil
+  return { pandoc.Header(1, pandoc.Inlines(name)), el }
+end
+
 -- Pixel sizes from the 1600 x 900 reveal.js slide -> mm on the 160 mm Beamer slide.
 local function Image(el)
   for _, k in ipairs{ "width", "height" } do
@@ -534,6 +557,6 @@ end
 -- 3. the span mapping runs last.
 return {
   { traverse = "topdown", Div = Div },
-  { Div = Div, Para = Para, Image = Image },
+  { Div = Div, Para = Para, Image = Image, Header = Header },
   SpanF,
 }

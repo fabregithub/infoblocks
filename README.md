@@ -66,39 +66,9 @@ The `bootstrapicons` package has the same set as Quarto, but it draws each icon 
 
 Run XeLaTeX **twice**. Both themes place the frame title with a `remember picture` overlay, and it appears only after the second pass.
 
-## Quarto: one source for reveal.js and Beamer
+## Quarto
 
-`quarto/` holds the pieces that let a Quarto reveal.js deck written with the JECS layout classes also render through Beamer with these blocks:
-
-| File | Role |
-|---|---|
-| `infoblocks.lua` | Quarto filter: `.cards`/`.card`, `.tiles`/`.tile`, icons (`[]{.ic .bi .bi-x}`), `.chip`, `.stat`, `.takeaway`, `.cite`, `.iconrow`, `.timeline`, `.chain`, `.org`, `.units`, `.compare`, `.steps`, `.photos`, `.booklet` → infoblocks / Beamer. It also maps Bootstrap Icons names to Font Awesome names, and converts image sizes from px on the 1600 px slide to mm on the 160 mm slide. It does nothing for other formats, so reveal.js output is unchanged |
-| `before-body.tex` | Template partial: the title page as a plain, unnumbered frame |
-| `title-background.tex` | Preamble: the JECS or NIES title image on page 1, in place of the theme's canvas |
-
-In the deck's YAML, with the paths relative to the `.qmd`:
-
-```yaml
-filters: [../../../../tex/infoblocks/quarto/infoblocks.lua]
-format:
-  beamer:
-    theme: JECS
-    pdf-engine: xelatex
-    latex-tinytex: false        # TeX Live 2026, not ~/Library/TinyTeX
-    include-in-header:
-      - beamer-preamble.tex     # fonts, zxjatype/xeCJK, \usepackage{infoblocks}
-      - ../../../../tex/infoblocks/quarto/title-background.tex
-    template-partials: [../../../../tex/infoblocks/quarto/before-body.tex]
-```
-
-`FY2026/20261116-JECS-Koriyama/quarto/` in the presentations repository is the working example.
-
-Why it is built this way:
-
-- **Title page.** Pandoc's Beamer class uses `ignorenonframetext`, which skips everything between frames and only finds frames written as `\begin{frame}` in the source. The themes' `\titleframe` macro therefore produces nothing, and its background setting is skipped. The partial writes the frame itself, and the preamble file swaps the background for page 1.
-- **Three passes in the filter.** The first runs top-down over containers, so they see their children's original spans. Pandoc does not revisit what a top-down handler returns, so the second, bottom-up pass handles what is inside them, and the span mapping runs last.
-- **Whitespace trimming.** It strips ASCII whitespace only. Lua's `%s` also matches the byte `0xA0`, which ends many UTF-8 Japanese characters.
-- **Raw `{=html}` blocks** (the meter grid, for example) do not reach Beamer. A Beamer version of such a slide goes in `::: {.content-visible when-format="beamer"}`.
+The Quarto side lives in its own repository, `~/dev/quarto`. It holds the shared JECS and NIES Quarto themes (`format: jecs-revealjs`, `jecs-beamer`, `nies-revealjs`, `nies-beamer`) and the filter that maps their layout classes to these macros for Beamer (`_extensions/_common/infoblocks.lua`). Until 2026-11-17 the filter and title partials were kept here, in `quarto/`.
 
 ## Notes
 
@@ -108,4 +78,4 @@ Why it is built this way:
 
 ## Licence
 
-MIT (see `LICENSE`). The JECS and NIES title images that `quarto/title-background.tex` points to belong to the theme repositories and are not part of this package.
+MIT (see `LICENSE`).
